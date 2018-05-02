@@ -33,7 +33,7 @@ import { VerifyComponent } from './verify/verify.component';
 import { HttpModule } from '@angular/http';
 import { Globals } from './globals';
 import { MessageService } from './services/message.service';
-
+import {ClockService} from './services/clock.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -68,7 +68,7 @@ import { MessageService } from './services/message.service';
     HttpModule,
     
   ],
-  providers: [AuthService,Globals,MessageService],
+  providers: [AuthService,Globals,MessageService,ClockService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

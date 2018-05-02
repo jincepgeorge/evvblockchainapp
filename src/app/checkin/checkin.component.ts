@@ -6,6 +6,7 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Router } from '@angular/router';
 import { Globals } from '../globals';
 import { MessageService } from '../services/message.service';
+import {ClockService} from '../services/clock.service';
 
 declare let cordova: any;
 declare let  navigator: any;
@@ -23,6 +24,7 @@ declare let  cameraError: any;
 export class CheckinComponent implements OnInit {
 
   today = Date.now();
+  time: Date;
   currentUser;
   title: string = 'My first AGM project';
   public base64Image : String;
@@ -34,7 +36,8 @@ export class CheckinComponent implements OnInit {
   constructor(private db: AngularFirestore,private authService: AuthService,
     private spinnerService: Ng4LoadingSpinnerService,
     private router: Router,private globals: Globals,
-    private messageService: MessageService) { 
+    private messageService: MessageService,
+    private clockService: ClockService) { 
     this.spinnerService.show();
     
   }
@@ -46,7 +49,7 @@ export class CheckinComponent implements OnInit {
     this.clientdata = this.db.collection('/clientlist').valueChanges();
     this.agentData = this.db.collection('/evvagents', ref => ref.where('email', '==', this.currentUser.email)).valueChanges();
     //this.agentData = this.db.collection('evvagents', ref => ref.where('Agents.email', '==', 'jince.george@xe04.ey.com')).valueChanges();
-   
+    this.clockService.getClock().subscribe(time => this.time = time);
 
       console.log(this.clientdata);
     this.clientdata.subscribe(result => {

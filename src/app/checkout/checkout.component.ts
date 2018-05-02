@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { AuthService } from '../services/auth.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import {ClockService} from '../services/clock.service';
 
 @Component({
   selector: 'app-checkout',
@@ -13,6 +14,7 @@ import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 })
 export class CheckoutComponent implements OnInit {
   today = Date.now();
+  time: Date;
   totalHours:any;
   currentUser;
   public clientdata: Observable<any[]>;
@@ -20,13 +22,16 @@ export class CheckoutComponent implements OnInit {
   constructor(private globals: Globals,
     private spinnerService: Ng4LoadingSpinnerService,
     private authService: AuthService,
-    private db: AngularFirestore) {
+    private db: AngularFirestore,
+    private clockService: ClockService) {
 
       this.spinnerService.show();
 
    }
 
   ngOnInit() {
+
+    this.clockService.getClock().subscribe(time => this.time = time);
 
     this.currentUser=this.authService.getLoggedInUser();
     console.log( this.currentUser.email);
