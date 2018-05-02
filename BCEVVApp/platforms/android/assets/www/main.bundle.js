@@ -245,12 +245,14 @@ var AppComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__verify_verify_component__ = __webpack_require__("../../../../../src/app/verify/verify.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__angular_http__ = __webpack_require__("../../../http/esm5/http.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__globals__ = __webpack_require__("../../../../../src/app/globals.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__services_message_service__ = __webpack_require__("../../../../../src/app/services/message.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -314,7 +316,7 @@ var AppModule = /** @class */ (function () {
                 }),
                 __WEBPACK_IMPORTED_MODULE_26__angular_http__["c" /* HttpModule */],
             ],
-            providers: [__WEBPACK_IMPORTED_MODULE_18__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_27__globals__["a" /* Globals */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_18__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_27__globals__["a" /* Globals */], __WEBPACK_IMPORTED_MODULE_28__services_message_service__["a" /* MessageService */]],
             bootstrap: [__WEBPACK_IMPORTED_MODULE_3__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
@@ -346,7 +348,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/checkin/checkin.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<section class=\"checkin-section\" >\n\n  <div class=\"app-sub-header\" *ngFor=\"let agent of agentData | async\">\n<h4>Welcome {{agent.name}}</h4>\n<img src=\"data:image/jpg;base64,{{agent.photo}}\" alt=\"\" class=\"user-avatar\">\n  </div>\n  <div *ngFor=\"let client of clientdata | async\">\n  <div class=\"time-container\">\n    <h4>\n      {{client.timing.date | date}}\n    </h4>\n    <h3>\n      {{client.timing.intime}}\n    </h3>\n  </div>\n\n\n  <div class=\"client-container text-white\" >\n    <div class=\"row\">\n      <div class=\"col-9 vertical-center\"  >\n        <div>Client Name: {{client.clientname}}</div>\n        <div>ID: {{client.clientid}}</div>\n        <div>Address:  {{client.Address}}</div>\n\n      </div>\n      <div class=\"col-3 vertical-center\">\n        <img src=\"assets/images/info-icon.png\" alt=\"\" class=\"img-fluid\">\n      </div>\n    </div>  </div>\n\n  \n  \n\n  <div class=\"map-container\">\n    <agm-map [latitude]=\"client.location.lat\" [longitude]=\"client.location.long\">\n      <agm-marker [latitude]=\"client.location.lat\" [longitude]=\"client.location.long\"></agm-marker>\n    </agm-map>\n  </div></div>\n  <div class=\"footer-container\" (click)=\"takeSelfie();\">\n   <h4>Checkin</h4>\n  </div>\n</section>"
+module.exports = "<section class=\"checkin-section\" >\n\n  <div class=\"app-sub-header\" *ngFor=\"let agent of agentData | async\">\n<h4>Welcome {{agent.name}}</h4>\n<img src=\"data:image/jpg;base64,{{agent.photo}}\" alt=\"\" class=\"user-avatar\">\n  </div>\n  <div *ngFor=\"let client of clientdata | async\">\n  <div class=\"time-container\">\n    <h4>\n      {{client.timing.date | date}}\n    </h4>\n    <h3>\n        {{ today | date:'shortTime'}}\n    </h3>\n  </div>\n\n\n  <div class=\"client-container text-white\" >\n    <div class=\"row\">\n      <div class=\"col-9 vertical-center\"  >\n        <div>Client Name: {{client.clientname}}</div>\n        <div>ID: {{client.clientid}}</div>\n        <div>Address:  {{client.Address}}</div>\n\n      </div>\n      <div class=\"col-3 vertical-center\">\n        <img src=\"assets/images/info-icon.png\" alt=\"\" class=\"img-fluid\">\n      </div>\n    </div>  </div>\n\n  \n  \n\n  <div class=\"map-container\">\n    <agm-map [latitude]=\"client.location.lat\" [longitude]=\"client.location.long\">\n      <agm-marker [latitude]=\"client.location.lat\" [longitude]=\"client.location.long\"></agm-marker>\n    </agm-map>\n  </div></div>\n  <div class=\"footer-container\" (click)=\"takeSelfie();\">\n   <h4>Checkin</h4>\n  </div>\n</section>"
 
 /***/ }),
 
@@ -362,6 +364,7 @@ module.exports = "<section class=\"checkin-section\" >\n\n  <div class=\"app-sub
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ng4_loading_spinner___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_ng4_loading_spinner__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_router__ = __webpack_require__("../../../router/esm5/router.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__globals__ = __webpack_require__("../../../../../src/app/globals.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_message_service__ = __webpack_require__("../../../../../src/app/services/message.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -377,13 +380,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var CheckinComponent = /** @class */ (function () {
-    function CheckinComponent(db, authService, spinnerService, router, globals) {
+    function CheckinComponent(db, authService, spinnerService, router, globals, messageService) {
         this.db = db;
         this.authService = authService;
         this.spinnerService = spinnerService;
         this.router = router;
         this.globals = globals;
+        this.messageService = messageService;
+        this.today = Date.now();
         this.title = 'My first AGM project';
         this.lat = 51.678418;
         this.lng = 7.809007;
@@ -397,9 +403,15 @@ var CheckinComponent = /** @class */ (function () {
         this.agentData = this.db.collection('/evvagents', function (ref) { return ref.where('email', '==', _this.currentUser.email); }).valueChanges();
         //this.agentData = this.db.collection('evvagents', ref => ref.where('Agents.email', '==', 'jince.george@xe04.ey.com')).valueChanges();
         console.log(this.clientdata);
-        this.clientdata.subscribe(function (result) { _this.spinnerService.hide(); console.log(result); });
+        this.clientdata.subscribe(function (result) {
+            _this.spinnerService.hide();
+            _this.globals.clientdata = result;
+            // this.messageService.sendMessage(result[0].clientname);
+            console.log(result);
+        });
         this.agentData.subscribe(function (result) {
             _this.spinnerService.hide();
+            _this.globals.agentData = result;
             _this.authService.getFaceId(result[0].photo).subscribe(function (res) {
                 console.log(res);
                 _this.loggedInUserImagefaceId = res[0].faceId;
@@ -442,7 +454,10 @@ var CheckinComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/checkin/checkin.component.html"),
             styles: [__webpack_require__("../../../../../src/app/checkin/checkin.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_firestore__["a" /* AngularFirestore */], __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */], __WEBPACK_IMPORTED_MODULE_3_ng4_loading_spinner__["Ng4LoadingSpinnerService"], __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */], __WEBPACK_IMPORTED_MODULE_5__globals__["a" /* Globals */]])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_firestore__["a" /* AngularFirestore */], __WEBPACK_IMPORTED_MODULE_1__services_auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_3_ng4_loading_spinner__["Ng4LoadingSpinnerService"],
+            __WEBPACK_IMPORTED_MODULE_4__angular_router__["b" /* Router */], __WEBPACK_IMPORTED_MODULE_5__globals__["a" /* Globals */],
+            __WEBPACK_IMPORTED_MODULE_6__services_message_service__["a" /* MessageService */]])
     ], CheckinComponent);
     return CheckinComponent;
 }());
@@ -459,7 +474,7 @@ exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-b
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, ".checkin-header{\r\n    height: 70px;\r\n    background: #ffc000;\r\n    text-align: center;\r\n    position: relative;\r\n}\r\n.user-avatar{\r\n    width: 80px;\r\n    border-radius: 50%;\r\n    position: absolute;\r\n    bottom: -57px;\r\n    left: 40%;\r\n}\r\n.time-container{\r\n    text-align: center;\r\n    margin-top: 60px;\r\n}\r\n.client-container{\r\n    background: #4472c4;\r\n    padding: 5px 10px;\r\n}\r\n.client-container .row{\r\n    margin: 0;\r\n}\r\n.client-info{\r\n    width: 80%;\r\n}\r\n.client-image{\r\n    width: 20%;\r\n}\r\n.client-image img{\r\n    width: 80px;\r\n}\r\n.footer-container{\r\n    position: fixed;\r\n    bottom: 0;\r\n    width: 100%;\r\n    height: 60px;\r\n    background: #70ad47;\r\n    text-align: center;\r\n    color: #fff;\r\n    padding: 15px 0;\r\n    \r\n}\r\n.vertical-center{\r\n    margin-top: auto;\r\nmargin-bottom: auto;\r\n}\r\nagm-map {\r\n    height: calc(100vh - 400px);\r\n  }", ""]);
 
 // exports
 
@@ -472,7 +487,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/checkout/checkout.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  checkout works!\n</p>\n"
+module.exports = "<section class=\"checkin-section\" >\n\n  <div class=\"app-sub-header\" *ngFor=\"let agent of agentData | async \">\n<h4>Welcome {{agent.name}}</h4>\n<img src=\"data:image/jpg;base64,{{agent.photo}}\" alt=\"\" class=\"user-avatar\">\n  </div>\n  <div *ngFor=\"let client of clientdata | async\">\n  <div class=\"time-container\">\n    <h4>\n      {{client.timing.date | date}}\n    </h4>\n    <h3>\n        {{ today | date:'shortTime'}}\n    </h3>\n  </div>\n\n\n  <div class=\"client-container text-white\" >\n    <div class=\"row\">\n      <div class=\"col-9 vertical-center\"  >\n        <div>Client Name: {{client.clientname}}</div>\n        <div>ID: {{client.clientid}}</div>\n        <div>Address:  {{client.Address}}</div>\n\n      </div>\n      <div class=\"col-3 vertical-center\">\n        <img src=\"assets/images/info-icon.png\" alt=\"\" class=\"img-fluid\">\n      </div>\n    </div>  </div>\n\n\n  \n  <div class=\"timer-container container\">\n    <div class=\"text-center\">  <h4>You are in work mode</h4>\n    </div>\n  \n    <div class=\"row\">\n      <div class=\"col-6 vertical-center\" style=\"border-right: 1px solid;\" >\n        <h5>Todays working hours</h5>\n        <h2>{{totalHours}} Hrs</h2>\n      </div>\n      <div class=\"col-6 vertical-center\"  >\n          <h5>Todays working hours</h5>\n        <h2>{{totalHours}} Hrs</h2>\n      </div>\n    </div>\n  </div>\n\n  <!-- <div class=\"map-container\">\n    <agm-map [latitude]=\"client.location.lat\" [longitude]=\"client.location.long\">\n      <agm-marker [latitude]=\"client.location.lat\" [longitude]=\"client.location.long\"></agm-marker>\n    </agm-map>\n  </div>--></div> \n  <div class=\"footer-container\" (click)=\"takeSelfie();\">\n   <h4>Checkout</h4>\n  </div>\n</section>"
 
 /***/ }),
 
@@ -482,6 +497,11 @@ module.exports = "<p>\n  checkout works!\n</p>\n"
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CheckoutComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__globals__ = __webpack_require__("../../../../../src/app/globals.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_auth_service__ = __webpack_require__("../../../../../src/app/services/auth.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_angularfire2_firestore__ = __webpack_require__("../../../../angularfire2/firestore/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng4_loading_spinner__ = __webpack_require__("../../../../ng4-loading-spinner/ng4-loading-spinner.umd.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ng4_loading_spinner___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_ng4_loading_spinner__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -492,10 +512,39 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 
+
+
+
+
 var CheckoutComponent = /** @class */ (function () {
-    function CheckoutComponent() {
+    function CheckoutComponent(globals, spinnerService, authService, db) {
+        this.globals = globals;
+        this.spinnerService = spinnerService;
+        this.authService = authService;
+        this.db = db;
+        this.today = Date.now();
+        this.spinnerService.show();
     }
     CheckoutComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.currentUser = this.authService.getLoggedInUser();
+        console.log(this.currentUser.email);
+        this.clientdata = this.db.collection('/clientlist').valueChanges();
+        this.agentData = this.db.collection('/evvagents', function (ref) { return ref.where('email', '==', _this.currentUser.email); }).valueChanges();
+        //this.agentData = this.db.collection('evvagents', ref => ref.where('Agents.email', '==', 'jince.george@xe04.ey.com')).valueChanges();
+        this.clientdata.subscribe(function (result) {
+            _this.spinnerService.hide();
+            // this.messageService.sendMessage(result[0].clientname);
+            console.log(result);
+            var diffInMs = Date.parse(result[0].timing.outtime) - Date.parse(result[0].timing.intime);
+            var diffInHours = diffInMs / 1000 / 60 / 60;
+            _this.totalHours = (diffInHours < 10) ? '0' + diffInHours : diffInHours;
+        });
+        this.agentData.subscribe(function (result) {
+            //this.spinnerService.hide();
+            // this.messageService.sendMessage(result[0].clientname);
+            console.log(result);
+        });
     };
     CheckoutComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Component"])({
@@ -503,7 +552,10 @@ var CheckoutComponent = /** @class */ (function () {
             template: __webpack_require__("../../../../../src/app/checkout/checkout.component.html"),
             styles: [__webpack_require__("../../../../../src/app/checkout/checkout.component.css")]
         }),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__globals__["a" /* Globals */],
+            __WEBPACK_IMPORTED_MODULE_4_ng4_loading_spinner__["Ng4LoadingSpinnerService"],
+            __WEBPACK_IMPORTED_MODULE_2__services_auth_service__["a" /* AuthService */],
+            __WEBPACK_IMPORTED_MODULE_3_angularfire2_firestore__["a" /* AngularFirestore */]])
     ], CheckoutComponent);
     return CheckoutComponent;
 }());
@@ -1057,6 +1109,44 @@ var AuthService = /** @class */ (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2_angularfire2_auth__["a" /* AngularFireAuth */], __WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* Router */], __WEBPACK_IMPORTED_MODULE_4__angular_http__["b" /* Http */]])
     ], AuthService);
     return AuthService;
+}());
+
+
+
+/***/ }),
+
+/***/ "../../../../../src/app/services/message.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MessageService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("../../../../rxjs/_esm5/Subject.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var MessageService = /** @class */ (function () {
+    function MessageService() {
+        this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+    }
+    MessageService.prototype.sendMessage = function (message) {
+        this.subject.next({ text: message });
+    };
+    MessageService.prototype.clearMessage = function () {
+        this.subject.next();
+    };
+    MessageService.prototype.getMessage = function () {
+        return this.subject.asObservable();
+    };
+    MessageService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])()
+    ], MessageService);
+    return MessageService;
 }());
 
 

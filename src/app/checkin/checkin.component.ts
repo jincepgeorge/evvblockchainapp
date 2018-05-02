@@ -5,6 +5,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { Router } from '@angular/router';
 import { Globals } from '../globals';
+import { MessageService } from '../services/message.service';
 
 declare let cordova: any;
 declare let  navigator: any;
@@ -21,7 +22,7 @@ declare let  cameraError: any;
 
 export class CheckinComponent implements OnInit {
 
-  
+  today = Date.now();
   currentUser;
   title: string = 'My first AGM project';
   public base64Image : String;
@@ -30,7 +31,10 @@ export class CheckinComponent implements OnInit {
   lng: number = 7.809007;
   public clientdata: Observable<any[]>;
   public agentData: Observable<any[]>;
-  constructor(private db: AngularFirestore,private authService: AuthService,private spinnerService: Ng4LoadingSpinnerService,private router: Router,private globals: Globals) { 
+  constructor(private db: AngularFirestore,private authService: AuthService,
+    private spinnerService: Ng4LoadingSpinnerService,
+    private router: Router,private globals: Globals,
+    private messageService: MessageService) { 
     this.spinnerService.show();
     
   }
@@ -42,10 +46,19 @@ export class CheckinComponent implements OnInit {
     this.clientdata = this.db.collection('/clientlist').valueChanges();
     this.agentData = this.db.collection('/evvagents', ref => ref.where('email', '==', this.currentUser.email)).valueChanges();
     //this.agentData = this.db.collection('evvagents', ref => ref.where('Agents.email', '==', 'jince.george@xe04.ey.com')).valueChanges();
-  
+   
+
       console.log(this.clientdata);
-    this.clientdata.subscribe(result => {this.spinnerService.hide();console.log(result)});
-    this.agentData.subscribe(result => {this.spinnerService.hide();
+    this.clientdata.subscribe(result => {
+      
+      this.spinnerService.hide();
+      this.globals.clientdata= result;
+     // this.messageService.sendMessage(result[0].clientname);
+      console.log(result)
+    });
+    this.agentData.subscribe(result => {
+      this.spinnerService.hide();
+      this.globals.agentData= result;
       this.authService.getFaceId(result[0].photo).subscribe(res => {
         
         console.log(res);

@@ -32,6 +32,8 @@ import { AgmCoreModule } from '@agm/core';
 import { VerifyComponent } from './verify/verify.component';
 import { HttpModule } from '@angular/http';
 import { Globals } from './globals';
+import { MessageService } from './services/message.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,7 +68,7 @@ import { Globals } from './globals';
     HttpModule,
     
   ],
-  providers: [AuthService,Globals],
+  providers: [AuthService,Globals,MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
